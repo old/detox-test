@@ -27,6 +27,11 @@ jobs:
       run: |
         echo "yes" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --verbose --install "system-images;android-29;google_apis;x86"
         echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager --verbose create avd --force --name Pixel_5 --device "pixel_5" -k 'system-images;android-29;google_apis;x86'
+    
+    - name: Increase RAM and Heap size
+      run: |
+        echo "vm.heapSize=576" > ~/.android/avd/Pixel_5/config.ini
+        echo "hw.ramSize=2048" > ~/.android/avd/Pixel_5/config.ini
 
     - name: Android Emulator
       timeout-minutes: 15
@@ -37,12 +42,7 @@ jobs:
         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done'
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
-      
-    - name: Increase RAM and Heap size
-      run: |
-        echo "vm.heapSize=576" > ~/.android/avd/Pixel_5/config.ini
-        echo "hw.ramSize=2048" > ~/.android/avd/Pixel_5/config.ini
-
+    
     - name: Build for detox
       run: yarn detox:build-android
 
