@@ -30,8 +30,8 @@ jobs:
     
     - name: Increase RAM and Heap size
       run: |
-        echo "vm.heapSize=576" > ~/.android/avd/Pixel_5/config.ini
-        echo "hw.ramSize=2048" > ~/.android/avd/Pixel_5/config.ini
+        echo "vm.heapSize=576" > ~/.android/avd/Pixel_5.avd/config.ini
+        echo "hw.ramSize=2048" > ~/.android/avd/Pixel_5.avd/config.ini
 
     - name: Android Emulator
       timeout-minutes: 15
