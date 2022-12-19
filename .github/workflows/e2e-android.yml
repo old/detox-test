@@ -30,8 +30,8 @@ jobs:
     
     - name: Increase RAM and Heap size
       run: |
-        echo "vm.heapSize=576" > ~/.android/avd/Pixel_5.avd/config.ini
-        echo "hw.ramSize=2048" > ~/.android/avd/Pixel_5.avd/config.ini
+        echo "vm.heapSize=576" >> ~/.android/avd/Pixel_5.avd/config.ini
+        echo "hw.ramSize=2048" >> ~/.android/avd/Pixel_5.avd/config.ini
 
     - name: Android Emulator
       timeout-minutes: 15
@@ -42,7 +42,7 @@ jobs:
         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done'
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
-    
+     
     - name: Build for detox
       run: yarn detox:build-android
 
