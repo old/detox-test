@@ -42,7 +42,7 @@ jobs:
       run: yarn detox:build-android
 
     - name: Find Process
-      run: $ANDROID_HOME/platform-tools/adb -s emulator-5554 shell
+      run: $ANDROID_HOME/platform-tools/adb -s emulator-5554 shell "ps | grep \"com\.detoxtestapp$\""
 
     - name: Start Detox Tests
       run: yarn detox:test-android
