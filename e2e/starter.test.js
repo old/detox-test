@@ -4,6 +4,6 @@ describe('Detox Test', () => {
   });
 
   it('should screenshot', async () => {
-    await device.takeScreenshot('Home-Page');
+    await device.takeScreenshot('home page');
   });
 });

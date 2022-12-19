@@ -17,7 +17,7 @@ jobs:
 
     - name: Install Yarn Dependencies
       run: yarn install
-      
+
     - uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
@@ -40,6 +40,9 @@ jobs:
 
     - name: Build for detox
       run: yarn detox:build-android
+
+    - name: Find Emulator
+      run: $ANDROID_HOME/platform-tools/adb -s emulator-5554 shell
 
     - name: Start Detox Tests
       run: yarn detox:test-android
