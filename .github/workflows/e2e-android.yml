@@ -47,4 +47,4 @@ jobs:
       run: yarn detox:build-android
 
     - name: Start Detox Tests
-      run: yarn detox:test-android
+      run: yarn start & yarn detox:test-android

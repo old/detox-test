@@ -36,5 +36,5 @@ jobs:
         run: yarn detox:build-ios
 
       - name: Run Detox Tests
-        run: yarn detox:test-ios
+        run: yarn start & yarn detox:test-ios
 
