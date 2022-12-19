@@ -1,0 +1,45 @@
+name: E2E (Android)
+
+on: push
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Yarn Dependencies
+      run: yarn install
+=
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11.0.17+8'
+
+    - name: Download Android Emulator Image
+      run: |
+        echo "yes" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --verbose --install "system-images;android-29;google_apis;x86"
+        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager --verbose create avd --force --name Pixel_5 --device "pixel_5" -k 'system-images;android-29;google_apis;x86'
+
+    - name: Android Emulator
+      timeout-minutes: 15
+      continue-on-error: true
+      run: |
+        echo "Starting emulator"
+        nohup $ANDROID_HOME/emulator/emulator -avd Pixel_5 -no-audio -no-snapshot -no-window &
+        $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done'
+        $ANDROID_HOME/platform-tools/adb devices
+        echo "Emulator started"
+
+    - name: Build for detox
+      run: yarn detox:build-android
+
+    - name: Start Detox Tests
+      run: yarn detox:test-android

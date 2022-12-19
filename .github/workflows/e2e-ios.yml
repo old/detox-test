@@ -1,0 +1,40 @@
+name: E2E (iOS)
+
+on: push
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Yarn Dependencies
+        run: yarn install
+
+      - name: Install Pods
+        run: |
+          gem update cocoapods xcodeproj
+          cd ./ios && pod install && cd ../
+      
+      - name: Install Detox Dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+
+      - name: List Available Devices
+        run: | 
+          applesimutils --list
+          
+      - name: Run Detox Build
+        run: yarn detox:build-ios
+
+      - name: Run Detox Tests
+        run: yarn detox:test-ios
+
